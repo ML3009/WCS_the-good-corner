@@ -20,16 +20,17 @@ export default function ListAds(){
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     const getAds = async () => {
-        //prevoir le try catch
-        const { data } = await instance.get<AdType[]>("/ads/list");
-        setDataAds(data);
-        setIsLoading(false);
+        try {
+            const { data } = await instance.get<AdType[]>("/ads/list");
+            setDataAds(data);
+            setIsLoading(false);
+        } catch(error: unknown) {
+            console.log(error);
+        }
     };
     
     useEffect(() => {
-        setTimeout(() => {
             getAds();
-        }, 4000);
     }, [])
 
     if (isLoading){
@@ -43,6 +44,7 @@ export default function ListAds(){
                             return (
                             <CardAd 
                                 key={ad.id}
+                                id ={ad.id}
                                 title={ad.title}
                                 description={ad.description}
                                 price={ad.price}
