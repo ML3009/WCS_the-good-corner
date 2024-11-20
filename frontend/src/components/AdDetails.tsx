@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import instance from "../lib/instance.ts";
-import { AdType } from "./ListAds.tsx"
+import type { AdType } from "../types/ads.d.ts";
 import { useParams } from "react-router-dom"
 
 
 function AdDetails() {
     const { id } = useParams<{id: string}>()
     console.log(id);
-    const [dataAd, setDataAd] = useState<AdType>()
+    const [ad, setAd] = useState<AdType>()
     const [isLoading, setIsLoading] = useState<boolean>(true)
-
+    const [error, setError] = useState("");
+    
     const getAd = async () => {
         try {
             const { data } = await instance.get<AdType>(`/ads/find/${id}`)
-            setDataAd(data);
-            setIsLoading(false);
-
-        } catch(error: unknown) {
-            console.log(error)
+            console.log(data);
+            setAd(data);
+        } catch(error: any) {
+            setError(error.response.data.message)
         }
+        setIsLoading(false);
     }
 
     useEffect(() => {
@@ -31,16 +32,19 @@ function AdDetails() {
 
     return (
     <>
-       {dataAd === undefined ?
+       {ad ?
             (
-                <div>Annonce désactivée</div>
+                <>
+                    <h1>{ad?.title}</h1>
+                    <p>{ad?.description}</p>
+                    <p>{ad?.price}</p>
+                    <p>{ad?.created_at}</p>
+                    {ad?.tags?.map((tag) => (
+                        <p key={tag.id}>{tag.label}</p>
+                    ))}
+                </>
             ) : (
-            <>
-                <h1>{dataAd?.title}</h1>
-                <p>{dataAd?.description}</p>
-                <p>{dataAd?.price}</p>
-                <p>{dataAd?.created_at}</p>
-            </>
+                <div>{error}</div>
             )
        }
      </>

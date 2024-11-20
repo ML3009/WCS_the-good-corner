@@ -11,11 +11,11 @@ export default class AdService {
     }
     
     async listAds() {
-        return await this.db.find({ relations: ["category"] });
+        return await this.db.find({ relations: ["category", "tags"] });
     }
     
     async findAdById(id: string)  {
-        const ad = await this.db.findOne({where: {id}})
+        const ad = await this.db.findOne({where: {id}, relations: ["category", "tags"]})
         if (!ad) {
             throw new Error("Ad not found")
         }

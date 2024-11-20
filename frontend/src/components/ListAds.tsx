@@ -1,18 +1,7 @@
 import CardAd from "./CardAd"
 import { useEffect, useState } from "react";
 import instance from "../lib/instance.ts";
-
-
-export type AdType = {
-    id: string;
-    title: string;
-    description: string;
-    price: number;
-    picture:string;
-    location:string;
-    created_at: string;
-    updated_at: string
-}
+import type { AdType } from "../types/ads.d.ts";
 
 export default function ListAds(){
     

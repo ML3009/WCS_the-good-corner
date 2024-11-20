@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import Home from "./components/Home.tsx"
 import AdDetails from "./components/AdDetails.tsx";
+import Exercice1 from "./components/Exercices/Exercice1.tsx";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
         path: "/ads/:id",
         element: <AdDetails />
       },
+      {
+        path: "/exercice1",
+        element: <Exercice1/>
+      }
     ],
   },
 ]);
