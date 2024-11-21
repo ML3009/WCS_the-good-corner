@@ -100,12 +100,12 @@ function Exercice1() {
                         > 
                             Supprimer 
                         </button>
-                        {editId ? (
+                        {editId  === todo.id? (
                             <button
                             onClick={handleCancelEdit}> Annuler</button>
                             
-                            ) : (
-                                <button
+                                ) : (
+                            <button
                                 style={{
                                     fontSize: 15,
                                 }}

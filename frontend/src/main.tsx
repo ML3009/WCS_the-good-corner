@@ -6,7 +6,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.tsx";
 import Home from "./components/Home.tsx"
 import AdDetails from "./components/AdDetails.tsx";
+import AdCreate from "./components/AdCreate.tsx";
 import Exercice1 from "./components/Exercices/Exercice1.tsx";
+
 
 const router = createBrowserRouter([
   {
@@ -17,8 +19,12 @@ const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/ads/:id",
+        path: "/ads/view/:id",
         element: <AdDetails />
+      },
+      {
+        path: "/ads/create",
+        element: <AdCreate />
       },
       {
         path: "/exercice1",

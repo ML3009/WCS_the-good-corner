@@ -2,6 +2,7 @@ import AdRepository from "../repositories/Ad.repository";
 import AdEntity from "../entities/Ad.entity";
 import TagEntity from "../entities/Tag.entity"
 import TagService from "../services/tag.service"
+import { validate } from "class-validator";
 
 export default class AdService {
 
@@ -33,10 +34,17 @@ export default class AdService {
             tags = await new TagService().findMultipleTagsByIds(tagsIds);
             console.log(tags)
         }
-        const newAd = await this.db.save({
+        const newAd = this.db.create({
             ...ad,
             tags,
         });
+
+        const errors = await validate(newAd)
+        if (errors.length > 0) {
+            throw new Error(errors[0].value)
+        }
+
+       await this.db.save(newAd);
         return newAd;
     }
 

@@ -1,4 +1,4 @@
-import type { AdType } from "../types/ads.d.ts";
+import type { AdType } from "@/types/ads.d.ts";
 import { Link } from "react-router-dom"
 
 
@@ -10,7 +10,7 @@ export default function CardAd(props: Partial<AdType>) {
                 <p>{props.description}</p>
                 <p>{props.price} Euros</p>
                 <p>{props.created_at}</p>
-                <Link to={`/ads/${props.id}`}>Voir le produit</Link>
+                <Link to={`/ads/view/${props.id}`}>Voir le produit</Link>
             </div>
         </>
     )
