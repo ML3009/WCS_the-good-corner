@@ -10,7 +10,8 @@ export default function CardAd(props: Partial<AdType>) {
                 <p>{props.description}</p>
                 <p>{props.price} Euros</p>
                 <p>{props.created_at}</p>
-                <Link to={`/ads/view/${props.id}`}>Voir le produit</Link>
+                <p><Link to={`/ads/view/${props.id}`}>Voir le produit</Link> </p>
+                <p><Link to={`/ads/view/update/${props.id}`}>Modifier le produit</Link></p>
             </div>
         </>
     )

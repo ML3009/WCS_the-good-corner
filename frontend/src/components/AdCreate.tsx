@@ -2,16 +2,12 @@ import formFields from "../utils/formFields";
 import instance from "../lib/instance";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { AdCreateFormInfos, AdType } from "../types/ads";
+import { AdCreateFormInfos } from "../types/ads";
+import { CategoryType } from "@/types/category";
 
-type CategoryType = {
-  id: string;
-  title: string;
-  created_at: string;
-  updated_at: string;
-};
 
-function NewAd() {
+
+function AdCreate() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<CategoryType[]>();
   const [data, setData] = useState<AdCreateFormInfos>({
@@ -27,7 +23,7 @@ function NewAd() {
 
   const getCategories = async () => {
     try {
-      const { data } = await instance.get<CategoryType[]>("categories/list");
+      const { data } = await instance.get<CategoryType[]>("/categories/list");
       setCategories(data);
     } catch (err: any) {
       console.log({ err });
@@ -94,7 +90,7 @@ function NewAd() {
     </div>
   );
 }
-export default NewAd;
+export default AdCreate;
 
 
 
