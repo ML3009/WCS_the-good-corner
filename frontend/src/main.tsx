@@ -8,7 +8,9 @@ import Home from "./components/Home.tsx"
 import AdDetails from "./components/AdDetails.tsx";
 import AdCreate from "./components/AdCreate.tsx";
 import AdUpdate from "./components/AdUpdate.tsx";
+import AdsFromCategory from "./components/AdsFromCategory.tsx";
 import Exercice1 from "./components/Exercices/Exercice1.tsx";
+import './index.css';
 
 
 const router = createBrowserRouter([
@@ -30,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/ads/view/update/:id",
         element: <AdUpdate />
+      },
+      { 
+        path: "/categories/:id", 
+        element: <AdsFromCategory /> 
       },
       {
         path: "/exercice1",

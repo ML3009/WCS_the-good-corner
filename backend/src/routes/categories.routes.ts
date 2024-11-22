@@ -9,17 +9,17 @@ router.get("/list", async (req, res) => {
     res.status(200).json(categoryList)
 });
 
-router.get("/find/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-        const category = await new CategoryService().findCategoryById(id);
-        res.status(200).json(category);
-    } catch (err) {
-        res.status(404).send({message: "L'annonce n'existe pas"});
-    }
-});
+// router.get("/find/:id", async (req, res) => {
+//     const { id } = req.params;
+//     try {
+//         const category = await new CategoryService().findCategoryById(id);
+//         res.status(200).json(category);
+//     } catch (err) {
+//         res.status(404).send({message: "L'annonce n'existe pas"});
+//     }
+// });
 
-router.get("/find/:id/:limit", async (req, res) => {
+router.get("/find/:id/:limit?", async (req, res) => {
     const { id , limit} = req.params;
     try {
       const category = await new CategoryService().findCategoryById(id, limit);

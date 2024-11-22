@@ -8,87 +8,112 @@ import { CategoryType } from "@/types/category";
 
 
 function AdCreate() {
-  const navigate = useNavigate();
-  const [categories, setCategories] = useState<CategoryType[]>();
-  const [data, setData] = useState<AdCreateFormInfos>({
-//   const [data, setData] = useState<AdCreateFormInfos>({
-    title: "",
-    description: "",
-    price: 0,
-    picture: "",
-    location: "",
-    category: { id: "" },
-  });
-  const [error, setError] = useState();
+	const navigate = useNavigate();
+	const [categories, setCategories] = useState<CategoryType[]>();
+	const [preview, setPreview] = useState("");
+	const [file, setFile] = useState<File | null>(null);
+	const [data, setData] = useState<AdCreateFormInfos>({
+		title: "",
+		description: "",
+		price: 0,
+		picture: "",
+		location: "",
+		category: { id: "" },
+	});
+	const [error, setError] = useState();
 
-  const getCategories = async () => {
-    try {
-      const { data } = await instance.get<CategoryType[]>("/categories/list");
-      setCategories(data);
-    } catch (err: any) {
-      console.log({ err });
-      setError(err.reponse.data.message);
-    }
-  };
+	const getCategories = async () => {
+		try {
+			const { data } = await instance.get<CategoryType[]>("/categories/list");
+			setCategories(data);
+		} catch (err: any) {
+			console.log({ err });
+			setError(err.reponse.data.message);
+		}
+	};
 
-  useEffect(() => {
-    getCategories();
-  }, []);
+	useEffect(() => {
+		getCategories();
+	}, []);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("DATA", data);
-    try {
-      await instance.post("/ads/create", data);
-      navigate("/");
-    } catch (err: any) {
-      console.log(err);
-    }
-  };
+	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		const formData = new FormData();
+		if (file) {
+			formData.append("picture", file)
+		}
+		formData.append("title", data.title)
+		formData.append("description", data.description)
+		formData.append("price", data.price.toString())
+		formData.append("location", data.location);
+		formData.append("category", data.category.id)
+		try {
+			await instance.post("/ads/create", formData, {
+				headers: { "Content-Type": "multipart/form-data" }
+			});
+			navigate("/");
+		} catch (err: any) {
+			console.log(err);
+		}
+	};
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
-    setData((prevData) => ({
-      ...prevData,
-      [name]: name === "category" ? { id: value } : value, // {category : {id}}
-    }));
-  };
+	const handleChange = (
+		event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+	) => {
+		const { name, value } = event.target;
+		setData((prevData) => ({
+			...prevData,
+			[name]: name === "category" ? { id: value } : value, // {category : {id}}
+		}));
+	};
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        {/* <label>
-                Titre : </label>
-                <input type="text" name="title" value={} />
-            </label> */}
-        <select name="category" required onChange={handleChange}>
-          <option>Choisir une catégorie</option>
-          {categories?.map((category) => {
-            return (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            );
-          })}
-        </select>
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		console.log("je change le fichier")
+		console.log(e.target.files);
+		if (e.target.files) {
+			const selectedFile = e.target.files[0]
+			setFile(selectedFile);
+			setPreview(URL.createObjectURL(selectedFile));
+		}
 
-        {formFields.map((field) => (
-          <label key={field.label} style={{ display: "flex" }}>
-            {field.name}:
-            <input
-              type={field.type}
-              name={field.name}
-              onChange={handleChange}
-              value={data[field.name]}
-            />
-          </label>
-        ))}
-        <button type="submit">Soumettre</button>
-      </form>
-    </div>
-  );
+	}
+	return (
+		<div>
+			<form onSubmit={handleSubmit}>
+				{/* <label>
+								Titre : </label>
+								<input type="text" name="title" value={} />
+						</label> */}
+				<select name="category" required onChange={handleChange}>
+					<option>Choisir une catégorie</option>
+					{categories?.map((category) => {
+						return (
+							<option key={category.id} value={category.id}>
+								{category.title}
+							</option>
+						);
+					})}
+				</select>
+
+				{formFields.map((field) => (
+					<label key={field.label} style={{ display: "flex" }}>
+						{field.name}:
+						<input
+							type={field.type}
+							name={field.name}
+							onChange={(e) => field.type === "file"? handleFileChange(e) : handleChange(e)}
+							value={data[field.name]}
+						/>
+					</label>
+				))}
+				<div>
+					<p>Prévisualisation</p>
+					<img src={preview} alt="Prévisualisation" style={{ maxWidth: 300, maxHeight: 300 }}></img>
+				</div>
+				<button type="submit">Soumettre</button>
+			</form>
+		</div>
+	);
 }
 export default AdCreate;
 
@@ -167,7 +192,7 @@ export default AdCreate;
 //       console.log(err);
 //     }
 //   };
-  
+	
 //   const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
 //     const id = e.target.value;
 //     setFormInfos({ ...formInfos, category: { id } });
@@ -209,7 +234,7 @@ export default AdCreate;
 //             ))}
 //           </select>
 //           {getFields()}
-         
+				 
 //           <button>Ajouter l'annonce</button>
 //         </form>
 //       )}

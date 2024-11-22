@@ -3,6 +3,7 @@ import AdEntity from "../entities/Ad.entity";
 import TagEntity from "../entities/Tag.entity"
 import TagService from "../services/tag.service"
 import { validate } from "class-validator";
+import { FindOneOptions, FindOptionsOrderValue } from "typeorm";
 
 export default class AdService {
 
@@ -11,8 +12,15 @@ export default class AdService {
         this.db = new AdRepository();
     }
     
-    async listAds() {
-        return await this.db.find({ relations: ["category", "tags"] });
+    async listAds(options: {
+        limit?: number;
+        order?: FindOptionsOrderValue;
+    }) {
+        return await this.db.find({ 
+            relations: ["category", "tags"],
+            order: {created_at: options.order ?? "ASC"},
+            take: options.limit,
+         });
     }
     
     async findAdById(id: string)  {

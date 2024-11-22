@@ -10,7 +10,7 @@ export default function ListAds(){
 
     const getAds = async () => {
         try {
-            const { data } = await instance.get<AdType[]>("/ads/list");
+            const { data } = await instance.get<AdType[]>("/ads/list?limit=5&order=DESC");
             setDataAds(data);
             setIsLoading(false);
         } catch(error: unknown) {
@@ -26,24 +26,20 @@ export default function ListAds(){
         return <div>Chargement en cours</div>
     }
     return (
-        <>
+        <div className= "flex flex-wrap bg-violet-800">
             { dataAds.length > 0 ? 
                 (
                     dataAds.map((ad) => {
                             return (
                             <CardAd 
                                 key={ad.id}
-                                id ={ad.id}
-                                title={ad.title}
-                                description={ad.description}
-                                price={ad.price}
-                                created_at={ad.created_at}
+                                data ={ad}
                             />
                         )})
                 ) : (
                     <div>Aucune annonce</div>
                 )
             }
-        </>
+        </div>
     )
 }
