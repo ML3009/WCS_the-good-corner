@@ -17,7 +17,7 @@ export default class CategoryService {
         if (limit) { // si limit est indiquée, on va chercher la méthode personnalisé dans notre repository
           category = await this.db.findCategoryByIdWithLimitAds(id, limit);
         } else {
-          category = await this.db.findOne({ where: { id } });
+          category = await this.db.findOne({ where: { id }, relations:["ads"] });
         }
         // const category = await this.db.findOne({ where: { id } });
         if (!category) {
